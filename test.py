@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-data = pd.read_csv('telespor.csv', sep=';')
+data = pd.read_csv('data/telespor.csv', sep=';')
 df = data.copy(deep=True).head(20)
 
 print(data.head(10))
