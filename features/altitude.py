@@ -32,7 +32,8 @@ def add_altitude(data):
         if (range_count >= data_len-1):
             range_count -= 50
             range_count += (data_len - range_count)
+        print(counter)
 
-    data['altitude'] = altitude
+    data['Altitude'] = altitude
 
     return data
