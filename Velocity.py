@@ -5,7 +5,7 @@ Calculate the velocit of the sheep based on the Haversine formula in m/h.
 """
 
 def calculate_velocity(lat1, long1, lat2, long2):
-    dist = calculate_distance(lat1, long2, lat2, long2)
+    dist = calculate_distance(lat1, long1, lat2, long2)
     return round(dist/0.5, 3)
 
 def add_velocity(data):
