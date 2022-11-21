@@ -3,7 +3,7 @@ import pandas as pd
 import warnings
 warnings.filterwarnings("ignore")
 
-data = pd.read_csv('data/rovviltskader_vasket.csv')
+# data = pd.read_csv('data/rovviltskader_vasket.csv')
 
 # Remove where skadedato is usikker
 def remove_skadedato_uncertain(data):
@@ -25,6 +25,6 @@ def remove_skadedato_uncertain_and_not_one_date(data):
     data2 = remove_skadedato_not_one_date(data1)
     return data2
 
-data = remove_skadedato_uncertain_and_not_one_date(data)
-data.to_csv('rovviltskader_sikker_en_dato_meraker_2015-2022.csv', index=False)
+#data = remove_skadedato_uncertain_and_not_one_date(data)
+#data.to_csv('rovviltskader_sikker_en_dato_meraker_2015-2022.csv', index=False)
 

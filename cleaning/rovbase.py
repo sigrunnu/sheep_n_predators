@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-data = pd.read_csv('data/rovviltskader_meraker_2015-2022.csv')
+#data = pd.read_csv('data/rovviltskader_meraker_2015-2022.csv')
 
 # Removes rows with Skadeårsak = ukjent, rødrev, sykdom, ikke rovvilt, hund, ulykke. 
 def remove_specific_skadearsak(data):
@@ -25,6 +25,6 @@ def remove_rows_with_empty_position(data):
         if np.isnan(data.loc[x, "Lengdegrad"]) or np.isnan(data.loc[x, "Breddegrad"]):
             data.drop(x, inplace=True)
 
-data = remove_specific_skadearsak(data)
-data = format_date(data)
-data.to_csv("rovviltskader_vasket.csv", index = False)
+#data = remove_specific_skadearsak(data)
+#data = format_date(data)
+#data.to_csv("rovviltskader_vasket.csv", index = False)
