@@ -44,5 +44,5 @@ for i in range(0, len(data)*2-1, 2):
                      ).reset_index(drop=True)
 
 
-data.to_csv('weatherData/2012_clean.csv')
+data.to_csv('weatherData/2012_clean.csv', index=False)
 print(data.head(50))
