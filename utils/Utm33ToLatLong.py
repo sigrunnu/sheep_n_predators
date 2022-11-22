@@ -6,6 +6,7 @@
 
 """
 import requests
+import pandas as pd
 
 
 def converter(data):
@@ -36,3 +37,13 @@ def converter(data):
     data["longitude"] = long
 
     return data
+
+
+skadet1 = pd.read_csv(
+    'data/rovviltskader_sikker_en_dato_meraker_2015-2022.csv')
+skadet2 = pd.read_csv('data/rovviltskader_vasket.csv')
+
+
+converter(skadet1).to_csv(
+    'data/rovviltskader_sikker_en_dato_meraker_2015-2022.csv', index=False)
+converter(skadet2).to_csv('data/rovviltskader_vasket.csv', index=False)
