@@ -35,5 +35,14 @@ def remove_unnecessary_columns(data, filename):
         print(e)
         return pd.DataFrame()
 
-#data = pd.read_csv('data/clean_tingvoll/2012_koksvik_00022_2201.csv')
-iterate_over_all_files()
+# Change the type in column and fill if something is missing
+def change_dtypes(data):
+    data[['Y']] = data[['Y']].fillna(0).astype('int64')
+    data[['X']] = data[['X']].fillna(0)
+    #data[['Date']] = data[['Date']].astype('datetime64')
+    return data
+
+
+data = pd.read_csv('data/clean_tingvoll/2012_koksvik_00022_2201.csv')
+
+#iterate_over_all_files()
