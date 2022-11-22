@@ -1,5 +1,5 @@
 import pandas as pd
-from haversine import haversine
+from haversine import haversine, Unit
 
 """
 Calculate distance travelled from one point to another in meters by using Haversine formula.
@@ -8,7 +8,7 @@ Calculate distance travelled from one point to another in meters by using Havers
 def calculate_distance(lat1, long1, lat2, long2):
     t1 = (lat1, long1)
     t2 = (lat2, long2)
-    return haversine(t1, t2) * float(10^3) # meters
+    return haversine(t1, t2, unit=Unit.METERS)
 
 def add_distance(data):
     data['distance'] = 0
