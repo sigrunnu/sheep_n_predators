@@ -15,9 +15,10 @@ def iterate_over_all_files():
             new = remove_duplicates(data)
             new2 = convert(new)
             new3 = change_dtypes(new2)
+            new4 = new3.sort_values(by=['individual', 'date_time'])
 
-            if not new3.empty:
-                new3.to_csv(filepath, index=False)
+            if not new4.empty:
+                new4.to_csv(filepath, index=False)
                 print('Lagret til fil:', file)
 
 
