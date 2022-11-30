@@ -1,6 +1,6 @@
 import pandas as pd
 from RemoveDuplicates import remove_duplicates
-from kaasa_convert import convert, change_dtypes
+from CleanKaasa import clean_individual_nr_not_null, change_dtypes, match_source_id_to_individual
 
 
 def iterate_over_all_files():
@@ -12,13 +12,14 @@ def iterate_over_all_files():
         data = pd.read_csv(filepath)
 
         if not data.empty:
-            new = remove_duplicates(data)
-            new2 = convert(new)
-            new3 = change_dtypes(new2)
-            new4 = new3.sort_values(by=['individual', 'date_time'])
+            new = remove_duplicates(data) #DONE
+            new2 = clean_individual_nr_not_null(new) #DONE
+            new3 = change_dtypes(new2) #DONE 
+            new4 = match_source_id_to_individual(new3) #DONE
+            new5 = new4.sort_values(by=['individual', 'date_time']) #DONE
 
-            if not new4.empty:
-                new4.to_csv(filepath, index=False)
+            if not new5.empty:
+                new5.to_csv(filepath, index=False)
                 print('Lagret til fil:', file)
 
 
