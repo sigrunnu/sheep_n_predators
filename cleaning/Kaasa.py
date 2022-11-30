@@ -23,4 +23,4 @@ def iterate_over_all_files():
                 print('Lagret til fil:', file)
 
 
-iterate_over_all_files()
+#iterate_over_all_files()
