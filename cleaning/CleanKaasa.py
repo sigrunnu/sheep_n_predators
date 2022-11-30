@@ -1,28 +1,6 @@
 import pandas as pd
 
-def change_dtypes(data):
-    data.rename(columns={'position_t': 'date_time'}, inplace=True)
-
-    data['latitude'] = data['latitude'].fillna(0.0).astype('float64')
-    data['longitude'] = data['longitude'].fillna(0.0).astype('float64')
-    data['owner_id'] = data['owner_id'].fillna(0).astype('int64')
-    data['source_id'] = data['source_id'].fillna(0).astype('int64')
-    data['name'] = data['name'].fillna('-').astype('string')
-    data['date_time'] = data['date_time'].astype('datetime64')
-    data['individual'] = data['individual'].astype('int64')
-
-    return data
-
-
-# Replace all rows with individual_nr = (null) to actual number 0 for good type-casting
-def clean_individual_nr_not_null(data):
-    for x in data.index:
-        if (data.loc[x, "individual"] == '(null)'):
-            data.at[x, "individual"] = 0
-    return data
-
-
-# Fill in correct individual number based on source_id
+# Fill in correct individual number based on source_id if they exist
 def match_source_id_to_individual(data):
 
     empty_ind = data.loc[data['individual'] == 0]
@@ -39,3 +17,18 @@ def match_source_id_to_individual(data):
     
     res = pd.concat([empty_ind, others])
     return res
+
+
+# Remove source_id where its less than 10 occurances
+def remove_sheep_with_less_than_10_points(data):
+    
+    empty_ind = data.loc[data['individual'] == 0]
+
+    if not empty_ind.empty:
+        source_count = empty_ind['source_id'].value_counts()
+        
+        for x in source_count.index:
+            if source_count[x] < 10:
+                data = data.drop(data[data.source_id == x].index)
+    
+    return data               
