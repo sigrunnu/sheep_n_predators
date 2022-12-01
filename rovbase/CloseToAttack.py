@@ -48,8 +48,9 @@ def create_attack_data(skadet, sheep_data):
 
     for i in range(len(skadet)-1):
         for p in range(len(sheep_data)):
+            sheep_date = sheep_data.loc[p, "date_time"].split(" ")[0] # Get only date with not time
             isDate = skadet.loc[i,
-                                'Skadedato, fra'] == sheep_data.loc[p, "Date"]
+                                'Skadedato, fra'] == sheep_date
             if (isDate):
                 distance_to_attack = calculate_distance(
                     sheep_data.loc[p, 'Lat'], sheep_data.loc[p, 'Long'], skadet.loc[i, 'latitude'], skadet.loc[i, 'longitude'])
@@ -63,7 +64,8 @@ def create_attack_data(skadet, sheep_data):
     return sheep_data
 
 
-skadet = pd.read_csv('data/rovviltskader_sikker_en_dato_meraker_2015-2022.csv')
-koksvik = pd.read_csv('data/clean_tingvoll/2016_torjul_90163_1647.csv')
+skadet = pd.read_csv('data/rovbase/rovviltskader_sikker_en_dato_meraker_2015-2022.csv')
+koksvik = pd.read_csv('data/kaasa/kaasa_2021.csv')
 
-create_attack_data(skadet, koksvik)
+k = create_attack_data(skadet, koksvik)
+print(k.head(10))
