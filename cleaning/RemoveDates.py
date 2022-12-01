@@ -12,15 +12,17 @@ def remove_dates_where_sheep_not_on_pastures(data, filename, start, end):
     end = pd.to_datetime(end, dayfirst=True)
 
     try: 
-        data['Date'] = pd.to_datetime(data['Date'], yearfirst=True)
+        data['Date'] = pd.to_datetime(data['date_time'], yearfirst=True)
 
         for x in data.index:
-            date = data.loc[x, 'Date']
-            time = data.loc[x, 'Time']
-            full_date = f'{date} {time}'
+            #date = data.loc[x, 'Date'] # if date and time is splitted
+            #time = data.loc[x, 'Time'] # if date and time is splitted
+            #full_date = f'{date} {time}' # if date and time is splitted
+            date_time = data.loc[x, 'date_time']
 
-            parsed_date = pd.to_datetime(full_date)
+            parsed_date = pd.to_datetime(date_time)
             if parsed_date < start or parsed_date > end:
+                print("Droppet:",  parsed_date)
                 data.drop(x, inplace=True)
         print('Ferdig med: ' + filename)
         return data
@@ -31,6 +33,6 @@ def remove_dates_where_sheep_not_on_pastures(data, filename, start, end):
         return pd.DataFrame() # return empty dataframe
 
 
-#data = pd.read_csv('../data/tingvoll/2013_torjul_90075_2203.csv', sep='\t+', skiprows=[1, 2], engine='python', index_col=False)
-#new = remove_dates_where_sheep_not_on_pastures(data, '2013_torjul_90075_2203.csv', '16.06.2013  00:15:00', '25.08.2013  23:45:00')
-
+#data = pd.read_csv('data/kaasa/kaasa_2021.csv')
+#new = remove_dates_where_sheep_not_on_pastures(data, 'kaasa_2021.csv', '2021-05-28 15:43:37', '01.10.2021  23:59:59')
+#print(new)
