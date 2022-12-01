@@ -19,16 +19,19 @@ def match_source_id_to_individual(data):
     return res
 
 
-# Remove source_id where its less than 10 occurances
+# Remove sheep where its less than 10 occurances (check both source-id and individual even though these should be the same)
 def remove_sheep_with_less_than_10_points(data):
     
-    empty_ind = data.loc[data['individual'] == 0]
-
-    if not empty_ind.empty:
-        source_count = empty_ind['source_id'].value_counts()
+    if not data.empty:
+        source_count = data['source_id'].value_counts()
+        individual_count = data['individual'].value_counts()
         
         for x in source_count.index:
             if source_count[x] < 10:
                 data = data.drop(data[data.source_id == x].index)
+        
+        for x in individual_count.index:
+            if individual_count[x] < 10:
+                data = data.drop(data[data.individual == x].index)
     
     return data               
