@@ -3,8 +3,8 @@ import pandas as pd
 
 data = pd.read_csv('data/kaasa/kaasa_2021.csv')
 
-data['position_t'] = pd.to_datetime(data['position_t'], yearfirst=True)
-newd = data.sort_values(by=['individual', 'position_t'])
+data['date_time'] = pd.to_datetime(data['date_time'], yearfirst=True)
+newd = data.sort_values(by=['individual', 'date_time'])
 individuals = newd.groupby('individual').nunique()
 
 data_info = pd.DataFrame()
@@ -19,8 +19,8 @@ for individual in range(len(individuals)):
     points = newd[newd['individual'] == name]
     points.reset_index(inplace=True)
     individual_nr.append(points.loc[0]['individual'])
-    first_date.append(points.loc[0]['position_t'])
-    last_date.append(points.loc[(len(points)-1)]['position_t'])
+    first_date.append(points.loc[0]['date_time'])
+    last_date.append(points.loc[(len(points)-1)]['date_time'])
     nr_column.append(len(points))
 
 

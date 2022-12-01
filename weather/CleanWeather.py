@@ -1,12 +1,10 @@
 import pandas as pd
 import numpy as np
-import plotly as pl
-import requests
-import math
-import os
 import datetime
 
-from decimal import Decimal
+# Add temperature for every 30 minutes instead of 1 hours.
+# Only used if sheep data has 30 minute intervals
+
 
 data = pd.read_csv('weatherData/2012.csv', sep=';')
 
