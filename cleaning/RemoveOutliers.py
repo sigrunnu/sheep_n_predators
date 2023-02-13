@@ -22,26 +22,33 @@ def find_movement_window(individual):
         lat = group['st_y']
         long = group['st_x']
 
-        distance_median = distance_to_x(
-            individual.loc[x, 'st_y'], individual.loc[x, 'st_x'], lat.median(), long.median())
-
-        """
-        if (distance_median > 100000):
-            print(distance_median)
-            print(data.loc[x])
+        remove_outliers_median(
+            individual, x, lat.median(), long.median(), 100000)
+        #remove_outliers_mean(individual, x, lat.mean(), long.mean(), 50000)
 
 
-        """
-        distance_mean = distance_to_x(
-            individual.loc[x, 'st_y'], individual.loc[x, 'st_x'], lat.mean(), long.mean())
-        if (distance_mean > 50000):
-            print(distance_mean)
-            print(x)
-            new_coordiantes = generate_new_coordinates(x)
-            print(generate_new_coordinates(x))
-            data.loc[x, "st_y"] = new_coordiantes[0]
-            data.loc[x, "st_x"] = new_coordiantes[1]
-            print(data.loc[x])
+def remove_outliers_median(individual, x, lat_median, long_median, value):
+    distance_median = distance_to_x(
+        individual.loc[x, 'st_y'], individual.loc[x, 'st_x'], lat_median, long_median)
+    if (distance_median > value):
+        print(distance_median)
+        print(x)
+        print(data.loc[x])
+        new_coordinates = generate_new_coordinates(x)
+        print(new_coordinates)
+
+
+def remove_outliers_mean(individual, x, lat_mean, long_mean, value):
+    distance_mean = distance_to_x(
+        individual.loc[x, 'st_y'], individual.loc[x, 'st_x'], lat_mean, long_mean)
+    if (distance_mean > value):
+        print(distance_mean)
+        print(x)
+        new_coordinates = generate_new_coordinates(x)
+        print(generate_new_coordinates(x))
+        data.loc[x, "st_y"] = new_coordinates[0]
+        data.loc[x, "st_x"] = new_coordinates[1]
+        print(data.loc[x])
 
 
 def generate_new_coordinates(x):
