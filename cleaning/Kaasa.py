@@ -20,7 +20,8 @@ def iterate_over_all_files():
             new6 = data.sort_values(by=['individual', 'date_time']) #DONE
 
             if not new6.empty:
-                new6.to_csv(filepath, index=False)
+                filpath_to_save = 'data/kaasa' + str(file)
+                new6.to_csv(filpath_to_save, index=False)
                 print('Lagret til fil:', file)
 
 

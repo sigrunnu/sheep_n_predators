@@ -13,8 +13,8 @@ def add_altitude(data):
     while counter <= math.ceil(data_len/50):
         coordinates = []
         for i in range(old_range_count, range_count):
-            x = data['Long'][i]
-            y = data['Lat'][i]
+            x = data['longitude'][i]
+            y = data['latitude'][i]
             d = [x, y]
 
             coordinates.append(d)
@@ -32,8 +32,7 @@ def add_altitude(data):
         if (range_count >= data_len-1):
             range_count -= 50
             range_count += (data_len - range_count)
-        print(counter)
 
-    data['Altitude'] = altitude
+    data['altitude'] = altitude
 
     return data
