@@ -19,3 +19,13 @@ def replace_individual_nr_with_null_values(data):
         if (data.loc[x, "individual"] == '(null)'):
             data.at[x, "individual"] = 0
     return data
+
+# Remove columns not needed
+def remove_columns(data):
+    data.drop(columns=['latitude', 'longitude'])
+    return data
+
+# Rename columns
+def rename_columns(data):
+    data.rename(columns={'st_y': 'latitude', 'st_x': 'longitude'})
+    return data
