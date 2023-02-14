@@ -21,7 +21,8 @@ def iterate_over_all_files():
         # new4 = match_source_id_to_individual(new3) #DONE
         # new5 = remove_sheep_with_less_than_10_points(data) #DONE
         # new6 = data.sort_values(by=['individual', 'date_time'])  # DONE
-        new7 = remove_outliers(data)
+        new7 = remove_outliers(data) # DONE
+        
         if not new7.empty:
             filpath_to_save = 'data/kaasa/' + str(file)
             new7.to_csv(filpath_to_save, index=False)
