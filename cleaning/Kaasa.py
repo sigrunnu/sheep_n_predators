@@ -11,7 +11,6 @@ def iterate_over_all_files():
 
     for file in files:
         filepath = 'data/kaasa/' + str(file)
-        print(filepath)
         data = pd.read_csv(filepath)
 
         # if not data.empty:
