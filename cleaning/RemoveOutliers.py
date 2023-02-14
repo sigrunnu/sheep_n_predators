@@ -2,7 +2,7 @@ import pandas as pd
 from haversine import haversine, Unit
 
 
-# First loop trough all individuals to make sure the distance between each individual will not alter the result
+# Step 1. Group by individuals ad then find movement window. Grouping by individuals is done so other individuals wont affect the one sheeps movements.
 def remove_outliers(data):
     individuals = data.individual.unique()
     for i in individuals:
@@ -32,18 +32,15 @@ def find_movement_window(start_index, end_index,  data):
         for i in range(len(date_time)-1):
             diff = date_time[i]-date_time[i+1]
             time_diff.append(abs(diff.total_seconds()/3600))
+        
         # mean_hours are used to find what the distance limit from x to the mean should be
         mean_hours = sum(time_diff)/5
 
-        # This one should be run before remove_outliers_mean
         remove_outliers_median(x, lat.median(), long.median(), 100000, data)
-
         remove_outliers_mean(x, lat.mean(), long.mean(), data, mean_hours)
 
 
 # Find and replace the outliers with a spesific distance to the median of the movement window
-
-
 def remove_outliers_median(x, lat_median, long_median, distance_limit, data):
     distance_median = distance_to_x(
         data.loc[x, 'latitude'], data.loc[x, 'longitude'], lat_median, long_median)
@@ -55,8 +52,8 @@ def remove_outliers_median(x, lat_median, long_median, distance_limit, data):
         generate_new_coordinates(x, data)
 
 
+# Find and replace the outliers with a spesific distance to the mean of the movement window
 def remove_outliers_mean(x, lat_mean, long_mean, data,  mean_hours):
-    # Find and replace the outliers with a spesific distance to the mean of the movement window
 
     # find distance from x to the mean distance
     distance_mean = distance_to_x(
@@ -64,7 +61,7 @@ def remove_outliers_mean(x, lat_mean, long_mean, data,  mean_hours):
 
     # Set the lowest limit to 15km/h * 1
     mean_hours = mean_hours if mean_hours > 1 else 1
-    # Set the lowest limit to 15km/h * 1
+    # Set the highest limit to 15km/h * 6
     mean_hours = 6 if mean_hours > 5 else mean_hours
 
     # The distance is found by multiplying 15 km/h with the number of hours between each point because a sheep can not run 15km/hour
