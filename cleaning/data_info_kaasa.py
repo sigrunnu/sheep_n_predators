@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-data = pd.read_csv('data/kaasa/kaasa_2021.csv')
+data = pd.read_csv('data/kaasa/kaasa_2018.csv')
 
 data['date_time'] = pd.to_datetime(data['date_time'], yearfirst=True)
 newd = data.sort_values(by=['individual', 'date_time'])
@@ -29,4 +29,4 @@ data_info['first_date'] = first_date
 data_info['last_date'] = last_date
 data_info['nr_data_points'] = nr_column
 print(data_info)
-data_info.to_csv('data/kaasa/info_kaasa.csv', index=False)
+data_info.to_csv('data/kaasa/info_kaasa_2019.csv', index=False)
