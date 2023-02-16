@@ -30,9 +30,3 @@ def add_temperature(sheep_data, weather_data):
             # If the date do not exist in the weather data
             sheep_data.at[i, 'temperature'] = None
     return sheep_data
-
-
-weather = pd.read_csv('../data/weather/kaasa_2021.csv', sep=";")
-data = pd.read_csv('../data/kaasa/kaasa_2021.csv', sep=",")
-
-add_temperature(data, weather)
