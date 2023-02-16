@@ -83,7 +83,7 @@ def GetValues(data):
 
 
 """
-Function to start threading. The data is splitted in 4 threads.
+Function to start threading. The data is splitted in 6 threads.
 """
 def runner(data):
     start1, first1, second1, third1, four1, five1, end1 = GetValues(data)
