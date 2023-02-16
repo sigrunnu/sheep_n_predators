@@ -71,32 +71,38 @@ def add_altitude(data, start, stop):
 Get start and stop index/position for every thread.
 """
 def GetValues(data):
-    interval = int((len(data)) / 4)
+    interval = int((len(data)) / 6)
     start = 0
     first = interval
     second = 2*interval
     third = 3*interval
+    four = 4*interval
+    five = 5*interval
     end = len(data)
-    return start, first, second, third, end
+    return start, first, second, third, four, five, end
 
 
 """
 Function to start threading. The data is splitted in 4 threads.
 """
 def runner(data):
-    start1, first1, second1, third1, end1 = GetValues(data)
-    print(start1, first1, second1, third1, end1)
+    start1, first1, second1, third1, four1, five1, end1 = GetValues(data)
+    print(start1, first1, second1, third1, four1, five1, end1)
 
     data1 = data.iloc[start1:first1, :]
     data2 = data.iloc[first1:second1, :]
     data3 = data.iloc[second1:third1, :]
-    data4 = data.iloc[third1:end1, :]
+    data4 = data.iloc[third1:four1, :]
+    data5 = data.iloc[four1:five1, :]
+    data6 = data.iloc[five1:end1, :]
 
     threads = [
         Thread(target=add_altitude, args=(data1, start1, first1)),
         Thread(target=add_altitude, args=(data2, first1, second1)),
         Thread(target=add_altitude, args=(data3, second1, third1)),
-        Thread(target=add_altitude, args=(data4, third1, end1))
+        Thread(target=add_altitude, args=(data4, third1, four1)),
+        Thread(target=add_altitude, args=(data5, four1, five1)),
+        Thread(target=add_altitude, args=(data6, five1, end1))
     ]
 
     for t in threads:
@@ -110,18 +116,23 @@ def runner(data):
     return datatot
 
 """
-Need to add a new column to the data before adding altitude. 
+Need to add a new column to the data before adding altitude (only initial time). 
 """
 def add_new_column(data):
     data['altitude'] = [0.0] * len(data)
     return data
 
-
+"""
+Check if altitudes are less than 0 and higher than 1441 (highest mountain in Merkåker)
+"""
 def check_wrong_altitudes(data):
     i = 0
     while i < len(data):
         if data.at[i, 'altitude'] < float(0):
-            print('this row has altitude less than 0: ', data.iloc[[i]])
+            print('this row has altitude less than 0 masl.: ', data.iloc[[i]])
+        if data.at[i, 'altitude'] > float(1441):
+            print('this row has altitude higher than 1441 masl.: ', data.iloc[[i]])
+        i += 1
 
 
 k2015 = pd.read_csv('data/kaasa/kaasa_2015.csv')
@@ -132,40 +143,48 @@ k2019 = pd.read_csv('data/kaasa/kaasa_2019.csv')
 k2020 = pd.read_csv('data/kaasa/kaasa_2020.csv')
 k2021 = pd.read_csv('data/kaasa/kaasa_2021.csv')
 
-k2015 = add_new_column(k2015)
-k2016 = add_new_column(k2016)
-k2017 = add_new_column(k2017)
-k2018 = add_new_column(k2018)
-k2019 = add_new_column(k2019)
-k2020 = add_new_column(k2020)
-k2021 = add_new_column(k2021)
+#k2015 = add_new_column(k2015)
+#k2016 = add_new_column(k2016)
+#k2017 = add_new_column(k2017)
+#k2018 = add_new_column(k2018)
+#k2019 = add_new_column(k2019)
+#k2020 = add_new_column(k2020)
+#k2021 = add_new_column(k2021)
 
-k2015_done = runner(k2015)
-k2015_done.to_csv('data/kaasa/kaasa_2015a.csv', index=False)
-print('number of rows with different altitudes: ', k2015_done['altitude'].value_counts())
+#k2015_done = runner(k2015)
+#k2015_done.to_csv('data/kaasa/kaasa_2015.csv', index=False)
+#print('number of rows with different altitudes: ', k2015_done['altitude'].value_counts())
 
-k2016_done = runner(k2016)
-k2016_done.to_csv('data/kaasa/kaasa_2016.csv', index=False)
-print('number of rows with different altitudes: ', k2016_done['altitude'].value_counts())
+#k2016_done = runner(k2016)
+#k2016_done.to_csv('data/kaasa/kaasa_2016.csv', index=False)
+#print('number of rows with different altitudes: ', k2016_done['altitude'].value_counts())
 
-k2017_done = runner(k2017)
-k2017_done.to_csv('data/kaasa/kaasa_2017.csv', index=False)
-print('number of rows with different altitudes: ', k2017_done['altitude'].value_counts())
+#k2017_done = runner(k2017)
+#k2017_done.to_csv('data/kaasa/kaasa_2017.csv', index=False)
+#print('number of rows with different altitudes: ', k2017_done['altitude'].value_counts())
 
-k2018_done = runner(k2018)
-k2018_done.to_csv('data/kaasa/kaasa_2018.csv', index=False)
-print('number of rows with different altitudes: ', k2018_done['altitude'].value_counts())
+#k2018_done = runner(k2018)
+#k2018_done.to_csv('data/kaasa/kaasa_2018.csv', index=False)
+#print('number of rows with different altitudes: ', k2018_done['altitude'].value_counts())
 
-k2019_done = runner(k2019)
-k2019_done.to_csv('data/kaasa/kaasa_2019.csv', index=False)
-print('number of rows with different altitudes: ', k2019_done['altitude'].value_counts())
+#k2019_done = runner(k2019)
+#k2019_done.to_csv('data/kaasa/kaasa_2019.csv', index=False)
+#print('number of rows with different altitudes: ', k2019_done['altitude'].value_counts())
 
-k2020_done = runner(k2020)
-k2020_done.to_csv('data/kaasa/kaasa_2020.csv', index=False)
-print('number of rows with different altitudes: ', k2020_done['altitude'].value_counts())
+#k2020_done = runner(k2020)
+#k2020_done.to_csv('data/kaasa/kaasa_2020.csv', index=False)
+#print('number of rows with different altitudes: ', k2020_done['altitude'].value_counts())
 
-k2021_done = runner(k2021)
-k2021_done.to_csv('data/kaasa/kaasa_2020.csv', index=False)
-print('number of rows with different altitudes: ', k2021_done['altitude'].value_counts())
+#k2021_done = runner(k2021)
+#k2021_done.to_csv('data/kaasa/kaasa_2021.csv', index=False)
+#print('number of rows with different altitudes: ', k2021_done['altitude'].value_counts())
+
+check_wrong_altitudes(k2015)
+check_wrong_altitudes(k2016)
+check_wrong_altitudes(k2017)
+check_wrong_altitudes(k2018)
+check_wrong_altitudes(k2019)
+check_wrong_altitudes(k2020)
+check_wrong_altitudes(k2021)
 
 print('the program took ', time.time() - time0, 'seconds')
