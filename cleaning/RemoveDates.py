@@ -4,27 +4,30 @@ import warnings
 warnings.filterwarnings("ignore")
 
 """
-Remove dates where the sheep is not out on the pastures. 
+Remove dates where the sheep is not out on the pastures. Args is dates. 
 Return data if dates are correct, if not, skip frame and inspect manually.
 """
 def remove_dates_where_sheep_not_on_pastures(data, filename, start, end):
     start = pd.to_datetime(start, dayfirst=True)
     end = pd.to_datetime(end, dayfirst=True)
 
+    num_removed = 0
+
     try: 
-        data['Date'] = pd.to_datetime(data['date_time'], yearfirst=True)
+        data['date_time'] = pd.to_datetime(data['date_time'], yearfirst=True)
 
         for x in data.index:
             #date = data.loc[x, 'Date'] # if date and time is splitted
             #time = data.loc[x, 'Time'] # if date and time is splitted
             #full_date = f'{date} {time}' # if date and time is splitted
-            date_time = data.loc[x, 'date_time']
+            date_time = data.at[x, 'date_time']
 
-            parsed_date = pd.to_datetime(date_time)
-            if parsed_date < start or parsed_date > end:
-                print("Droppet:",  parsed_date)
+            if date_time < start or date_time > end:
+                print("Droppet:",  date_time)
                 data.drop(x, inplace=True)
+                num_removed += 1
         print('Ferdig med: ' + filename)
+        print('Antall rader fjernet: ', num_removed)
         return data
 
     except Exception as e:
@@ -33,6 +36,18 @@ def remove_dates_where_sheep_not_on_pastures(data, filename, start, end):
         return pd.DataFrame() # return empty dataframe
 
 
-#data = pd.read_csv('data/kaasa/kaasa_2021.csv')
-#new = remove_dates_where_sheep_not_on_pastures(data, 'kaasa_2021.csv', '2021-05-28 15:43:37', '01.10.2021  23:59:59')
-#print(new)
+"""
+Remove all data from oct - june.
+"""
+def remove_rows_from_oct_to_jun(data):
+    data['date_time'] = pd.to_datetime(data['date_time'], yearfirst=True)
+
+    filter = data[(data['date_time'].dt.month == 6) | # juni
+                  (data['date_time'].dt.month == 7) | # juli
+                  (data['date_time'].dt.month == 8) | # august
+                  (data['date_time'].dt.month == 9)] # september
+    
+    print('Antall rader slettet: ', len(data) - len(filter))
+    return filter
+
+

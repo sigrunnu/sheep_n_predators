@@ -3,6 +3,7 @@ from RemoveDuplicates import remove_duplicates
 from CleanKaasa import match_source_id_to_individual, remove_sheep_with_less_than_10_points
 from FormatKaasa import replace_individual_nr_with_null_values, change_dtypes
 from RemoveOutliers import remove_outliers
+from RemoveDates import remove_rows_from_oct_to_jun
 
 
 def iterate_over_all_files():
@@ -20,11 +21,12 @@ def iterate_over_all_files():
         # new4 = match_source_id_to_individual(new3) #DONE
         # new5 = remove_sheep_with_less_than_10_points(data) #DONE
         # new6 = data.sort_values(by=['individual', 'date_time'])  # DONE
-        new7 = remove_outliers(data) # DONE
+        # new7 = remove_outliers(data) # DONE
+        new8 = remove_rows_from_oct_to_jun(data) # DONE
         
-        if not new7.empty:
+        if not new8.empty:
             filpath_to_save = 'data/kaasa/' + str(file)
-            new7.to_csv(filpath_to_save, index=False)
+            new8.to_csv(filpath_to_save, index=False)
             print('Lagret til fil:', file)
 
 
