@@ -30,3 +30,26 @@ def add_temperature(sheep_data, weather_data):
             # If the date do not exist in the weather data
             sheep_data.at[i, 'temperature'] = None
     return sheep_data
+
+
+def add_features():
+
+    files = ['kaasa_2021.csv', 'kaasa_2020.csv', 'kaasa_2019.csv',
+             'kaasa_2018.csv', 'kaasa_2017.csv', 'kaasa_2016.csv', 'kaasa_2015.csv']
+
+    for file in files:
+        filepath = 'data/kaasa/' + str(file)
+        data = pd.read_csv(filepath)
+
+        weather_filepath = 'data/weather/' + str(file)
+        weather_data = pd.read_csv(weather_filepath, sep=';')
+
+        if not data.empty:
+            new4 = add_temperature(data, weather_data)  # DONE
+
+            if not new4.empty:
+                new4.to_csv(filepath, index=False)
+                print('Lagret til fil:', file)
+
+
+add_features()
