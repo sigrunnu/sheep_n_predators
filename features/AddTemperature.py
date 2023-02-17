@@ -1,6 +1,4 @@
 import pandas as pd
-import numpy as np
-import plotly as pl
 
 
 # Loops trough the sheep data and compares date and hour with the weather data from the same year. Get the right temperature and adds it to the data.
