@@ -80,9 +80,8 @@ def delete_sheep_with_missing_dates(df):
         missing_dates1 = missing_dates(dates_unique1, first_date1, end_date1) # return list with missing dates
         
         if len(missing_dates1) > 0:
-            if len(missing_dates1) != 1:
-                print('For individ', ind, 'mangler følgende datoer: ', missing_dates1, '. Antall: ', len(missing_dates1))
-                print('--------------------------------------------------')
+            print('For individ', ind, 'mangler følgende datoer: ', missing_dates1, '. Antall: ', len(missing_dates1))
+            print('-------------------------------------------------------------------------------------------------')
             count_individual_w_missing_dates += 1
             occur_missing_dates[ind] = len(missing_dates1)
 
@@ -113,9 +112,8 @@ def delete_sheep_if_less_than_15_dates(df):
     
     return df
 
-data = pd.read_csv('data/kaasa/kaasa_2017.csv')
+data = pd.read_csv('data/kaasa/kaasa_2015.csv')
 
 new = delete_sheep_with_missing_dates(data)
 new1 = delete_sheep_if_less_than_15_dates(data)
-new1.to_csv('data/kaasa/kaasa_2017.csv', index=False)
-#new.to_csv('test.csv', index=False)
+#new1.to_csv('data/kaasa/kaasa_2015.csv', index=False)
