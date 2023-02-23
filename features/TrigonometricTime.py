@@ -25,9 +25,6 @@ def add_trigonometric_time(df):
     return df
 
 
-df = pd.read_csv('data/kaasa/kaasa_2021.csv')
-add_trigonometric_time(df)
-
 '''
 #klokke-figur fra Nina
 
