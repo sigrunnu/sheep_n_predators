@@ -123,8 +123,8 @@ def delete_sheep_if_less_than_15_dates(df):
     
     return df
 
-data = pd.read_csv('data/kaasa/kaasa_2020.csv')
+#data = pd.read_csv('data/kaasa/kaasa_2020.csv')
 
-new = delete_sheep_with_missing_dates(data)
-new1 = delete_sheep_if_less_than_15_dates(data)
+#new = delete_sheep_with_missing_dates(data)
+#new1 = delete_sheep_if_less_than_15_dates(data)
 #new1.to_csv('data/kaasa/kaasa_2020.csv', index=False)
