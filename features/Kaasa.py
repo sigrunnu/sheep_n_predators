@@ -2,7 +2,7 @@
 import pandas as pd
 
 from Velocity import add_velocity
-from Altitude import add_altitude
+#from Altitude import add_altitude
 from Distance import add_distance
 from TrigonometricTime import add_trigonometric_time
 
@@ -47,14 +47,18 @@ def add_features():
 
         if not data.empty:
             # new = add_velocity(data) # DONE
-            # new1 = add_distance(new) # DONE
-            # new2 = fix_0_points_first_row_each_individual(new1) # DONE
+            # new1 = add_distance(data)  # DONE
+            # new2 = fix_0_points_first_row_each_individual(new1)  # DONE
+            new = add_velocity(data)  # DONE
+
             #new3 = add_altitude(new2)
             # new4 = add_temperature(new3, weather_data) # DONE
-            new5 = add_trigonometric_time(data)
+            #new5 = add_trigonometric_time(data)
+            new['velocity'] = new['velocity'].astype('int64')
+            #new2['distance'] = new2['distance'].astype('int64')
 
-            if not new5.empty:
-                new5.to_csv(filepath, index=False)
+            if not new.empty:
+                new.to_csv(filepath, index=False)
                 print('Lagret til fil:', file)
 
 
