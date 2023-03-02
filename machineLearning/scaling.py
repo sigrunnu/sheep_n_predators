@@ -26,4 +26,5 @@ def standardize(df, columns):  # standardizes the columns listed in the variable
 
 # Eksempel:
 
+
 #df1 = Normalize(df, ['velocity', 'temperature', 'altitude', 'distance', 'date_time'], 0, 1)
