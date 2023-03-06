@@ -2,69 +2,67 @@ import pandas as pd
 from haversine import haversine
 from haversine import Unit
 
-"""
-Check if the sheep has been nearby an attack and add attack features to the dataset
-"""
-
-
+# Calculate distance from one point to another point
 def calculate_distance(lat1, long1, lat2, long2):
     t1 = (lat1, long1)
     t2 = (lat2, long2)
     return haversine(t1, t2, unit=Unit.METERS)
 
+# Add attack feature if attack is on same day as sheep and sheep is closer than 1500 meters
+def add_attack(sheep_data, attack_data, radius):
+    for a in attack_data.index:
+        attack_start_date = attack_data.at[a, 'Skadedato_fra'].date()
+        attack_end_date = attack_data.at[a, 'Skadedato_til'].date()
 
-def match_day(date, sheep_date):
-    return date == sheep_date
+        sheep_date = pd.to_datetime(sheep_data['date_time']).dt.date
 
+        # Get a list of indexes from sheep data where the sheep matches the attack date
+        sheep_indexes = sheep_data.loc[(attack_start_date <= sheep_date) & (sheep_date <= attack_end_date)].index
+        
+        for sheep in sheep_indexes:
+            sheep_lat = sheep_data.at[sheep, 'latitude']
+            sheep_long = sheep_data.at[sheep, 'longitude']
+            attack_lat = attack_data.at[a, 'latitude']
+            attack_long = attack_data.at[a, 'longitude']
 
-def add_attack_features(sheep_data, si, attack_data, ai, distance):
-    if (sheep_data.loc[si,
-                       'close_to_attack'] == 'No'):
-        sheep_data.loc[si,
-                       'attack_lat'] = attack_data.loc[ai, 'latitude']
-        sheep_data.loc[si,
-                       'attack_long'] = attack_data.loc[ai, 'longitude']
-        sheep_data.loc[si,
-                       'attack_id'] = attack_data.loc[ai, 'RovbaseID']
-        sheep_data.loc[si,
-                       'attack_predator'] = attack_data.loc[ai, 'Skadeårsak']
-        sheep_data.loc[si,
-                       'attack_distance'] = distance
-        sheep_data.loc[si,
-                       'close_to_attack'] = 'Yes'
-    else:
-        sheep_data.loc[si,
-                       'attack_id'] = sheep_data.loc[si,
-                                                     'attack_id'] + " " + attack_data.loc[ai, 'RovbaseID']
+            distance_to_attack = calculate_distance(sheep_lat, sheep_long, attack_lat, attack_long)
+            if distance_to_attack <= radius: 
+                sheep_data.at[sheep, 'attack'] = 1
+                #sheep_data.at[sheep, 'attack_distance'] = round(distance_to_attack, 0)
+                #sheep_data.at[sheep, 'predator'] = attack_data.at[a, 'Skadearsak']
+                #sheep_data.at[sheep, 'attack_id'] = attack_data.at[a, 'RovbaseID']
+    
+    attack_count = sheep_data['attack'].value_counts()
+    print('Radius: ', radius, 'meter \n', attack_count)
 
-
-def create_attack_data(attack_data, sheep_data):
-    sheep_data['attack_distance'] = 0
-    sheep_data['close_to_attack'] = "No"
-    sheep_data['attack_predator'] = "No"
-    sheep_data['attack_id'] = "No"
-    sheep_data['attack_long'] = 0.0
-    sheep_data['attack_lat'] = 0.0
-
-
-    for x in sheep_data.index:
-            sheep_date = sheep_data.loc[x, "date_time"].split(" ")[0] # Get only date with not time
-            
-            a_index = attack_data.loc[attack_data['Skadedato, fra'] == sheep_date].index
-            for i in a_index:
-                distance_to_attack = calculate_distance(
-                    sheep_data.loc[x, 'st_y'], sheep_data.loc[x, 'st_x'], attack_data.loc[i, 'latitude'], attack_data.loc[i, 'longitude'])
-                if (distance_to_attack <= 3000):
-                    add_attack_features(
-                        sheep_data, x, skadet, i, distance_to_attack)
-                
+    # attack_count[0] = antall rader som ikke er med i attack, attack_count[1] = antall rader som er med i attack
+    perc = 0.0 if attack_count[0] == len(sheep_data) else ((attack_count[1]/len(sheep_data)) * 100)
+    perc = round(perc, 2)
+    print('Prosent av hvor mye av dataen som er med i ett attack: ', perc, '%')
 
     return sheep_data
 
+"""
+attack_data = pd.read_csv('data/rovbase/rovviltskader.csv')
 
-skadet = pd.read_csv('data/rovbase/rovviltskader_sikker_en_dato_meraker_2015-2022.csv')
-koksvik = pd.read_csv('data/kaasa/kaasa_2017.csv')
+files = ['kaasa_2021.csv', 'kaasa_2020.csv', 'kaasa_2019.csv',
+             'kaasa_2018.csv', 'kaasa_2017.csv', 'kaasa_2016.csv', 'kaasa_2015.csv']
 
-k = create_attack_data(skadet, koksvik)
-print(k.head())
-k.to_csv('test2.csv')
+for file in files:
+    filepath = 'data/kaasa/' + str(file)
+    sheep_data = pd.read_csv(filepath)
+
+    sheep_data['date_time'] = pd.to_datetime(sheep_data['date_time'])
+    attack_data['Skadedato_fra'] = pd.to_datetime(attack_data['Skadedato_fra'])
+    attack_data['Skadedato_til'] = pd.to_datetime(attack_data['Skadedato_til'])
+
+    sheep_data['attack'] = 0
+    #sheep_data['attack_distance'] = 0.0
+    #sheep_data['predator'] = None
+    #sheep_data['attack_id'] = None
+
+    print('For datasett: ', file)
+    
+    new = add_attack(sheep_data=sheep_data, attack_data=attack_data, radius=1500)
+    #new.to_csv(filepath, index=False)
+"""
