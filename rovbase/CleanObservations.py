@@ -27,5 +27,6 @@ df1.rename(columns={'Aktivitetsdato, fra': 'Aktivitetsdato_fra',
            'Aktivitetsdato, til': 'Aktivitetsdato_til', 'Totalt antall': 'Totalt_antall'}, inplace=True)
 
 #print(df['Usikker skadedato'].value_counts())
+df2 = df1.sort_values(by=['Aktivitetsdato_fra'])
 
-df1.to_csv('../data/rovbase/rovviltobservasjoner.csv', index=False)
+df2.to_csv('../data/rovbase/rovviltobservasjoner.csv', index=False)

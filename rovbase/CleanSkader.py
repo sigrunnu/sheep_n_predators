@@ -1,5 +1,5 @@
-from utils.Utm33ToLatLong import converter
 import pandas as pd
+from utils.Utm33ToLatLong import converter
 import sys
 sys.path.append('../')
 
@@ -27,7 +27,7 @@ df1['Skadedato, til'] = pd.to_datetime(df1['Skadedato, til'],  dayfirst=True)
 df1.rename(columns={'Skadedato, til': 'Skadedato_til', 'Skadedato, fra': 'Skadedato_fra', 'Skadeårsak': 'Skadearsak',
            'Funnetdato': 'Funnet_dato',  'Usikker skadedato': 'Usikker_skadedato'}, inplace=True)
 
-# Removes rows with Skadeårsak = rødrev, sykdom, ikke rovvilt, hund, ulykke.
+# Removes rows with Skadeårsak = sykdom, ikke rovvilt, hund, ulykke.
 
 
 def remove_specific_skadearsak(data):
@@ -37,8 +37,10 @@ def remove_specific_skadearsak(data):
     return data
 
 
+df2 = df1.sort_values(by=['Skadedato_fra'])
+
+df3 = remove_specific_skadearsak(df2)
+df3.to_csv('../data/rovbase/rovviltskader.csv', index=False)
+
 #print(df1['Usikker skadedato'].value_counts())
 # print(df1['Skadearsak'].value_counts())
-
-df2 = remove_specific_skadearsak(df1)
-df2.to_csv('../data/rovbase/rovviltskader.csv', index=False)
