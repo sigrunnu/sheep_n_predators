@@ -5,7 +5,7 @@ from Velocity import add_velocity
 #from Altitude import add_altitude
 from Distance import add_distance
 from TrigonometricTime import add_trigonometric_time
-
+from InverseAngle import add_angle
 """
 The first row for every individual should have 0 in velocity and distance 
 This because they dont have any previous point to calculate from
@@ -49,13 +49,14 @@ def add_features():
             # new = add_velocity(data) # DONE
             # new1 = add_distance(data)  # DONE
             # new2 = fix_0_points_first_row_each_individual(new1)  # DONE
-            new = add_velocity(data)  # DONE
+            # new = add_velocity(data)  # DONE
 
             #new3 = add_altitude(new2)
             # new4 = add_temperature(new3, weather_data) # DONE
             #new5 = add_trigonometric_time(data)
-            new['velocity'] = new['velocity'].astype('int64')
+            #new['velocity'] = new['velocity'].astype('int64')
             #new2['distance'] = new2['distance'].astype('int64')
+            new = add_angle(data)
 
             if not new.empty:
                 new.to_csv(filepath, index=False)
