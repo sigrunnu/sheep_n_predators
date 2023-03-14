@@ -42,7 +42,7 @@ def add_attack(sheep_data, attack_data, radius):
 
     return sheep_data
 
-
+"""
 attack_data = pd.read_csv('data/rovbase/rovviltskader.csv')
 
 files = ['kaasa_2021.csv', 'kaasa_2020.csv', 'kaasa_2019.csv',
@@ -66,3 +66,4 @@ for file in files:
     
     new = add_attack(sheep_data=sheep_data1, attack_data=attack_data, radius=1500)
     new.to_csv(filepath, index=False)
+"""

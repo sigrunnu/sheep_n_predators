@@ -14,14 +14,13 @@ def ElbowMethod(df):
         kmeans = KMeans(n_clusters=i, max_iter=1000,  n_init=10).fit(df)
         df['clusters'] = kmeans.labels_
         score.append(kmeans.inertia_)
-    plt.figure(figsize=(14, 8))
+    plt.figure(figsize=(8, 4))
     plt.plot(range(1, 21), score)
-    plt.title('Elbow method for Kmeans++ with sin time, cos time, velocity, temperature and altitude', fontsize=25, pad=15)
-    plt.xlabel('Number of clusters', fontsize=25, labelpad=15)
-    xlabels = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+    plt.title('Elbow method for Kmeans++')
+    plt.xlabel('Number of clusters')
     plt.xticks(fontsize=20, ticks=[2, 4, 6, 8,
-               10, 12, 14, 16, 18, 20], labels=xlabels)
-    plt.ylabel('Score', fontsize=25, labelpad=15)
+               10, 12, 14, 16, 18, 20])
+    plt.ylabel('Score')
     plt.show()
 
 
@@ -41,9 +40,8 @@ def Kmeans3Dim(df, n_clusters):
         width=1, color='white')), selector=dict(mode='markers'))
     fig.show()
 
-# For polat plots
 
-
+# For polar plots
 def Kmeans(df, n_clusters):
     kmeans = KMeans(n_clusters=n_clusters)
     kmeans.fit(df)
