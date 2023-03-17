@@ -1,7 +1,6 @@
 import pandas as pd
-from RemoveDuplicates import remove_duplicates
-from CleanKaasa import match_source_id_to_individual, remove_sheep_with_less_than_10_points
-from FormatKaasa import replace_individual_nr_with_null_values, change_dtypes
+from Clean import match_source_id_to_individual, remove_sheep_with_less_than_10_points, remove_duplicates, replace_individual_nr_with_null_values
+from Format import change_dtypes
 from RemoveOutliers import remove_outliers
 from RemoveDates import remove_rows_from_oct_to_jun
 
