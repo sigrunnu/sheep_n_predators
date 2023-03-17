@@ -16,12 +16,11 @@ limit_last_date = pd.to_datetime('2019-08-01')
 
 never_left = True
 
+
 '''
 Loops trough the whole dataframe and extracts each individual sheep
 creates a new dataframe which do not contain the rows where the sheep are on the farm 
 '''
-
-
 def main(data):
     individuals = data.individual.unique()
     total_data = pd.DataFrame()
@@ -37,8 +36,6 @@ def main(data):
 '''
 Loops trough each individual to find out when the sheep leave for pasture and when it comes back
 '''
-
-
 def sheep_on_farm(i_data):
     global never_left
     never_left = True
@@ -132,10 +129,6 @@ def distance_to_x(x_lat, x_long, lat_median, long_median):
     return haversine(t1, t2, unit=Unit.METERS)
 
 
-# calculated center of the farm based on a density map
+# Calculated center of the farm based on a density map
 center_farm_lat = 63.4026
 center_farm_long = 11.7167
-
-df = pd.read_csv('data/kaasa/kaasa_2018.csv')
-new_data = main(df)
-new_data.to_csv('data/kaasa/kaasa_2019.csv', index=False)
