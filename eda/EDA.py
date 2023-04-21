@@ -1,25 +1,12 @@
 import pandas as pd
 
-"""
-k2015 = pd.read_csv('data/original/kaasa_2015.csv')
-k2016 = pd.read_csv('data/original/kaasa_2016.csv')
-k2017 = pd.read_csv('data/original/kaasa_2017.csv')
-k2018 = pd.read_csv('data/original/kaasa_2018.csv')
-k2019 = pd.read_csv('data/original/kaasa_2019.csv')
-k2020 = pd.read_csv('data/original/kaasa_2020.csv')
-k2021 = pd.read_csv('data/original/kaasa_2021.csv')
-
-total = [k2015, k2016, k2017, k2018, k2019, k2020, k2021]
-
-df = pd.concat(total, axis=0, ignore_index=True)
-"""
-# Return number of signals (plinger) for each date
-# Return a Dataframe with two column: date and num_occur
+# Return number of signals (plinger) for each date. Returns Dataframe with two column: date and num_occur
 def nr_occurances_each_date(i_data):
     dates = pd.to_datetime(i_data['date_time']).dt.date # get only date and not time stamp
     occur = dates.value_counts().to_frame(name='occur')
     occur = occur.rename_axis('date').reset_index(level=0) # rename index-axis to date, before converting it to a column and adding new index with numbers
     return occur
+
 
 # Retur number of occurances for each timestamp
 def nr_occurances_each_timestamp(i_data):
@@ -27,7 +14,8 @@ def nr_occurances_each_timestamp(i_data):
     occur = timestamps.value_counts().to_frame(name='num_occur')
     return occur
 
-# Standarize timestamps to nearest hour. 
+
+# Standarize timestamps to nearest hour
 def standarize_timestamp(df):
     for x in df.index:
         date = pd.to_datetime(df.at[x, 'date_time'])
