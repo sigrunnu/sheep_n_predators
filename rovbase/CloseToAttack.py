@@ -11,8 +11,8 @@ def calculate_distance(lat1, long1, lat2, long2):
 # Add attack feature if attack is on same day as sheep and sheep is closer than 1500 meters
 def add_attack(sheep_data, attack_data, radius):
     for a in attack_data.index:
-        attack_start_date = attack_data.at[a, 'Skadedato_fra'].date()
-        attack_end_date = attack_data.at[a, 'Skadedato_til'].date()
+        attack_start_date = attack_data.at[a, 'date_from'].date()
+        attack_end_date = attack_data.at[a, 'date_to'].date()
 
         sheep_date = pd.to_datetime(sheep_data['date_time']).dt.date
 
@@ -53,8 +53,8 @@ for file in files:
     sheep_data = pd.read_csv(filepath)
 
     sheep_data['date_time'] = pd.to_datetime(sheep_data['date_time'])
-    attack_data['Skadedato_fra'] = pd.to_datetime(attack_data['Skadedato_fra'])
-    attack_data['Skadedato_til'] = pd.to_datetime(attack_data['Skadedato_til'])
+    attack_data['date_from'] = pd.to_datetime(attack_data['date_from'])
+    attack_data['date_to'] = pd.to_datetime(attack_data['date_to'])
 
     sheep_data1 = sheep_data.drop(columns=['attack'])
     sheep_data1['attack'] = 0
