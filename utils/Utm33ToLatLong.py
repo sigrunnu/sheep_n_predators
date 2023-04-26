@@ -14,8 +14,8 @@ def converter(data):
 
     coordinates = []
     for i in range(len(data)):
-        x = data['Øst (UTM33/SWEREF99 TM)'][i]
-        y = data['Nord (UTM33/SWEREF99 TM)'][i]
+        x = data['Øst (UTM33/SWEREF99 TM)'][i] # Longitude (lengdegrad)
+        y = data['Nord (UTM33/SWEREF99 TM)'][i] # Latitude (breddegrad)
         d = {"x": str(x), "y": str(y)}
 
         coordinates.append(d)
@@ -29,8 +29,8 @@ def converter(data):
     lat = []
     long = []
     for value in req.json():
-        long.append(value['x'])
-        lat.append(value['y'])
+        long.append(value['x']) # Lengdegrad
+        lat.append(value['y']) # Breddegrad
 
     data["latitude"] = lat
     data["longitude"] = long
