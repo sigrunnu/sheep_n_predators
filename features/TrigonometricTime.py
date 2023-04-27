@@ -1,41 +1,51 @@
 
 import numpy as np
 import pandas as pd
-import seaborn as sns
-from matplotlib import pyplot as plt
+import plotly.express as px
 
 
-def add_trigonometric_time(df):
-    # Sin and cos time are calculated by finding minutes from midnight for each date time
+def add_trig_time(df):
+    """
+    Adds sine and cosine values for time of day to a given DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The DataFrame to add the values to.
+
+    Returns:
+        pandas.DataFrame: The updated DataFrame with sine and cosine values.
+    """
+    # Convert date_time column to datetime type
     df['date_time'] = pd.to_datetime(df['date_time'])
-    sin_time = []
-    cos_time = []
-    for i in df.index:
-        minutes_after_midnight = (df.at[i, 'date_time'] - df.at[i, 'date_time'].replace(
-            hour=0, minute=0, second=0, microsecond=0)).total_seconds() / (60)
 
-        # Use numpy to create sine and cosine values
-        minutes_in_day = 24 * 60
-        sin_time.append(np.sin(
-            2 * np.pi * minutes_after_midnight / minutes_in_day))
-        cos_time.append(np.cos(
-            2 * np.pi * minutes_after_midnight / minutes_in_day))
-    df['sin_time'] = sin_time
-    df['cos_time'] = cos_time
+    # Calculate minutes after midnight for each date time
+    minutes_since_midnight = (
+        df['date_time'] - df['date_time'].dt.normalize()).dt.total_seconds() / 60
+
+    # Calculate sine and cosine values for time of day. 1440 is the number of minutes in 24 hours.
+    df['sin_time'] = np.sin(
+        2 * np.pi * minutes_since_midnight / 1440)
+    df['cos_time'] = np.cos(
+        2 * np.pi * minutes_since_midnight / 1440)
+
     return df
 
 
-'''
-#klokke-figur fra Nina
+# Read data from file
+data_file = 'data/kaasa/kaasa_2021.csv'
+df = pd.read_csv(data_file)
 
-fig2, ax2 = plt.subplots(figsize=(8, 8))
-df.sample(100).plot.scatter('sin_time', 'cos_time', ax=ax2).set_aspect('equal')
-ax2.set_xlabel('sin_time', fontsize=20, labelpad=20)
-ax2.set_ylabel('cos_time', fontsize=20, labelpad=20)
-ax2.set_title('Sin and cos time plotted against each other',
-              fontsize=22, pad=20)
-plt.xticks(fontsize=15)
-plt.yticks(fontsize=15)
-plt.tight_layout()
-plt.show()
-'''
+# Add sine and cosine values to data
+df = add_trig_time(df)
+
+fig = px.scatter(df.sample(100), x='sin_time', y='cos_time')
+
+# Set the axis labels and title
+fig.update_layout(
+    xaxis_title='Sine time',
+    yaxis_title='Cosine time',
+    width=400,
+    height=400
+)
+
+# Show the plot
+fig.show()
