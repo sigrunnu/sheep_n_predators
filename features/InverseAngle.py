@@ -2,36 +2,33 @@ import numpy as np
 import pandas as pd
 
 
-# Add angle - but separate by individual positions
 def add_angle(data):
-    individuals = data.individual.unique()
-    data['angle'] = 0
-    for i in individuals:
-        # get index of first row for every individual
-        individual = data[data['individual'] == i]
-        start_index = individual.first_valid_index()
-        end_index = start_index + len(individual)
-        add_angle_individual(data, start_index, end_index)
-
+    # Group the data by individual and apply the 'add_angle_individual' function to each individual group
+    individuals = data.groupby('individual')
+    data['angle'] = individuals.apply(add_angle_individual)
     return data
 
 
-def add_angle_individual(df, start_index, end_index):
-    for i in range(start_index + 1, end_index-1):
-        vec1 = [df.at[i - 1, 'latitude'] - df.at[i, 'latitude'],
-                df.at[i - 1, 'longitude'] - df.at[i, 'longitude']]
-        vec2 = [df.at[i + 1, 'latitude'] - df.at[i, 'latitude'],
-                df.at[i + 1, 'longitude'] - df.at[i, 'longitude']]
+def add_angle_individual(individual):
+    lat = individual['latitude'].values
+    lon = individual['longitude'].values
 
-        len1 = np.sqrt(vec1[0]**2 + vec1[1]**2)
-        len2 = np.sqrt(vec2[0] ** 2 + vec2[1] ** 2)
-        dot = np.dot(vec1, vec2)
+    # Calculate vectors between consecutive positions
+    vec1 = np.column_stack((lat[:-2] - lat[1:-1], lon[:-2] - lon[1:-1]))
+    vec2 = np.column_stack((lat[2:] - lat[1:-1], lon[2:] - lon[1:-1]))
 
-        # To make sure that we do not divide by zero - check that the values are not zero
-        if len1*len2 == 0 and dot == 0:
-            df.at[i, 'angle'] = 0
-        else:
-            df.at[i, 'angle'] = 180 - \
-                (np.arccos(round(dot/(len1*len2), 7)) * 180 / np.pi)
+    # Calculate the dot product and vector lengths
+    dot = (vec1 * vec2).sum(axis=1)
+    len1 = np.linalg.norm(vec1, axis=1)
+    len2 = np.linalg.norm(vec2, axis=1)
 
-            # 180 minus angle is the inverse trajectory angle
+    # Calculate the angle between the vectors
+    angle = np.degrees(np.arccos(dot / (len1 * len2)))
+
+    # Calculate the inverse trajectory angle
+    angle = 180 - angle
+
+    # Set the first and last angle to 0
+    angle = np.concatenate(([0], angle, [0]))
+
+    return angle
