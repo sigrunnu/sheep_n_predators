@@ -1,30 +1,22 @@
-from sklearn import preprocessing
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import pandas as pd
-import numpy as np
 
 
-def normalize(df, columns, a, b):  # normalizes the columns listed in the variable columns
-    scaler = preprocessing.MinMaxScaler(feature_range=(a, b))
-    for i in range(len(columns)):
-        column = np.array(df[columns[i]]).reshape(-1, 1)
-        scaled = pd.DataFrame(scaler.fit_transform(
-            column), columns=[columns[i]])
-        df.drop(columns=[columns[i]], inplace=True)
-        df = pd.concat([scaled, df], axis=1)
+def normalize(df, columns, a=0, b=1):
+    """Normalizes the columns listed in 'columns' to the range (a, b)"""
+    scaler = MinMaxScaler(feature_range=(a, b))
+    for col in columns:
+        col_arr = df[col].values.reshape(-1, 1)
+        scaled = pd.DataFrame(scaler.fit_transform(col_arr), columns=[col])
+        df = df.drop(columns=col).join(scaled)
     return df
 
 
-def standardize(df, columns):  # standardizes the columns listed in the variable columns
-    scaler = preprocessing.StandardScaler()
-    for i in range(len(columns)):
-        column = np.array(df[columns[i]]).reshape(-1, 1)
-        scaled = pd.DataFrame(scaler.fit_transform(
-            column), columns=[columns[i]])
-        df.drop(columns=[columns[i]], inplace=True)
-        df = pd.concat([scaled, df], axis=1)
+def standardize(df, columns):
+    """Standardizes the columns listed in 'columns'"""
+    scaler = StandardScaler()
+    for col in columns:
+        col_arr = df[col].values.reshape(-1, 1)
+        scaled = pd.DataFrame(scaler.fit_transform(col_arr), columns=[col])
+        df = df.drop(columns=col).join(scaled)
     return df
-
-# Eksempel:
-
-
-#df1 = Normalize(df, ['velocity', 'temperature', 'altitude', 'distance', 'date_time'], 0, 1)
