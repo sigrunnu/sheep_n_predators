@@ -14,23 +14,15 @@ def create_roc_curve(y_test, y_pred):
 
     print('roc_auc_score for RandomForestClassifier: ', roc_auc_score(y_test, y_pred)) # roc_auc_score samme som auc(fpr, tpr)
 
-    # Calculate Youden's J statistic
-    j_scores = tpr - fpr
-    best_threshold = thresholds[np.argmax(j_scores)]
-    print("Best threshold:", best_threshold)
-
     # Plot the ROC curve
     plt.plot(fpr, tpr, color='darkorange', label='ROC curve (area = %0.2f)' % roc_auc)
     plt.plot([0, 1], [0, 1], color='navy', linestyle='--')
-    plt.scatter(fpr[np.argmax(j_scores)], tpr[np.argmax(j_scores)], s=70, marker='o', color='black', label='Best threshold')
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title('Receiver Operating Characteristic')
+    plt.title('Receiver Operating Characteristic (ROC) Curve')
     plt.legend(loc="lower right")
-    plt.axvline(x=0.20, color='r')
-    plt.axhline(y=0.76, color='b')
     plt.show()
 
 
