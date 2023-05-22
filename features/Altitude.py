@@ -14,30 +14,13 @@ Kartverket can handle 50 coordinates at once. We send in 50 coordinates as a lis
 """
 
 
-def add_altitude_no_threads(data):
-
-    for x in data.index:  # loop 50 times
-        lat = data.at[x, 'latitude']
-        long = data.at[x, 'longitude']
-        coordinate = [long, lat]
-        req = requests.get(
-            f'https://ws.geonorge.no/hoydedata/v1/punkt?koordsys=4326&geojson=false&punkter={[coordinate]}')
-
-        # from the returned response, get z-value which is altitude
-        for value in req.json()['punkter']:
-            data.at[x, 'altitude'] = value['z']
-            data.at[x, 'terrain'] = value['terreng']
-
-    return data
-
-
 def add_altitude(data, start, stop):
 
     exceptions = 0
 
     old_range_count = start  # start position for every iteration
-    # end position for every iteration (Kartverket can handle up to 50 coordinates at once)
-    range_count = start + 50
+    range_count = start + 50  # end position for every iteration (Kartverket can handle up to 50 coordinates at once)
+
 
     # these two list will always correspond, e. g index nr. 0 has the altitude nr. 0, index1 has altitude1..
     altitudes = []  # list with all returned altitudes
@@ -215,6 +198,7 @@ k2021 = pd.read_csv('data/kaasa/kaasa_2021.csv')
 # k2021_done = runner(k2021)
 # k2021_done.to_csv('data/kaasa/kaasa_2021.csv', index=False)
 # print('number of rows with different altitudes: ', k2021_done['altitude'].value_counts())
+
 '''
 check_wrong_altitudes(k2015)
 check_wrong_altitudes(k2016)
@@ -225,17 +209,3 @@ check_wrong_altitudes(k2020)
 check_wrong_altitudes(k2021)
 
 '''
-rovdata = pd.read_csv('data/rovbase/rovviltskader.csv')
-
-
-rovdata_1 = add_new_column(rovdata)
-rovdata_1['terrain'] = 0
-
-
-rovdata_done = add_altitude_no_threads(rovdata_1)
-rovdata_done.to_csv('data/rovbase/rovviltskader.csv', index=False)
-print('number of rows with different altitudes: ',
-      rovdata_done['altitude'].value_counts())
-check_wrong_altitudes(rovdata_done)
-
-print('the program took ', time.time() - time0, 'seconds')
