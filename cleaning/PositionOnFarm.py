@@ -1,7 +1,5 @@
-import datetime
 import pandas as pd
 from haversine import haversine, Unit
-import plotly.express as px
 import warnings
 warnings.filterwarnings("ignore")
 

@@ -1,6 +1,7 @@
 import pandas as pd
-from Clean import match_source_id_to_individual, remove_sheep_with_less_than_10_points, remove_duplicates, replace_individual_nr_with_null_values
-from Format import change_dtypes
+from FixIndividualNr import match_source_id_to_individual, remove_sheep_with_less_than_10_points
+from RemoveDups import  remove_duplicates
+from Formatting import change_dtypes, replace_individual_nr_with_null_values
 from RemoveOutliers import remove_outliers
 from RemoveDates import remove_rows_from_oct_to_jun
 

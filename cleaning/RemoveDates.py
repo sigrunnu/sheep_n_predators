@@ -4,7 +4,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 """
-Remove dates where the sheep is not out on the pastures. Args is dates. 
+Remove dates where the sheep is not out on the outfield pastures. Args is dates. 
 Return data if dates are correct, if not, skip frame and inspect manually.
 """
 def remove_dates_where_sheep_not_on_pastures(data, filename, start, end):
@@ -17,9 +17,6 @@ def remove_dates_where_sheep_not_on_pastures(data, filename, start, end):
         data['date_time'] = pd.to_datetime(data['date_time'], yearfirst=True)
 
         for x in data.index:
-            #date = data.loc[x, 'Date'] # if date and time is splitted
-            #time = data.loc[x, 'Time'] # if date and time is splitted
-            #full_date = f'{date} {time}' # if date and time is splitted
             date_time = data.at[x, 'date_time']
 
             if date_time < start or date_time > end:
@@ -79,7 +76,7 @@ Return new dataframe with no sheep that has more than 10 missing values.
 def delete_sheep_with_missing_dates(df):
     individuals = df.individual.unique() # list of individuals
     count_individual_w_missing_dates = 0
-    occur_missing_dates = dict() # only to help et an overview over sheep and their number of missing dates
+    occur_missing_dates = dict() # only to help get an overview over sheep and their number of missing dates
     
     for ind in individuals:
         i_data = df[df['individual'] == ind]
@@ -105,6 +102,7 @@ def delete_sheep_with_missing_dates(df):
     
     return df
 
+
 """
 Function to delete sheep if they have less than 15 unique dates. 
 Return new dataframe with sheep that only has over 15 unique dates.
@@ -122,9 +120,3 @@ def delete_sheep_if_less_than_15_dates(df):
             df.drop(i_data.index, inplace=True)
     
     return df
-
-#data = pd.read_csv('data/kaasa/kaasa_2020.csv')
-
-#new = delete_sheep_with_missing_dates(data)
-#new1 = delete_sheep_if_less_than_15_dates(data)
-#new1.to_csv('data/kaasa/kaasa_2020.csv', index=False)
