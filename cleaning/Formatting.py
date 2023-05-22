@@ -24,3 +24,10 @@ def remove_columns(data):
 def rename_columns(data):
     data.rename(columns={'st_y': 'latitude', 'st_x': 'longitude'})
     return data
+
+# Replace all rows with individual_nr = (null) to actual number 0 for good type-casting
+def replace_individual_nr_with_null_values(data):
+    for x in data.index:
+        if (data.loc[x, "individual"] == '(null)'):
+            data.at[x, "individual"] = 0
+    return data
