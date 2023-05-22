@@ -2,16 +2,16 @@
 import pandas as pd
 
 from Velocity import add_velocity
-#from Altitude import add_altitude
 from Distance import add_distance
 from TrigonometricTime import add_trigonometric_time
-from InverseAngle import add_angle
+from TrajectoryAngle import add_angle
+from Temperature import add_temperature
+
+
 """
 The first row for every individual should have 0 in velocity and distance 
 This because they dont have any previous point to calculate from
 """
-
-
 def fix_0_points_first_row_each_individual(data):
     # get all unique individual numbers (list)
     individuals = data.individual.unique()
@@ -31,8 +31,6 @@ def fix_0_points_first_row_each_individual(data):
 """
 Add velocity, altitude, temperature and distance for each data point
 """
-
-
 def add_features():
 
     files = ['kaasa_2021.csv', 'kaasa_2020.csv', 'kaasa_2019.csv',
@@ -51,11 +49,10 @@ def add_features():
             # new2 = fix_0_points_first_row_each_individual(new1)  # DONE
             # new = add_velocity(data)  # DONE
 
-            #new3 = add_altitude(new2)
             # new4 = add_temperature(new3, weather_data) # DONE
-            #new5 = add_trigonometric_time(data)
-            #new['velocity'] = new['velocity'].astype('int64')
-            #new2['distance'] = new2['distance'].astype('int64')
+            # new5 = add_trigonometric_time(data)
+            # new['velocity'] = new['velocity'].astype('int64')
+            # new2['distance'] = new2['distance'].astype('int64')
             new = add_angle(data)
 
             if not new.empty:

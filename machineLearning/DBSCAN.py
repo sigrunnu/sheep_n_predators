@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.cluster import DBSCAN
 from sklearn.neighbors import NearestNeighbors
-from scaling import standardize, normalize
+from Scaling import standardize, normalize
 import seaborn as sns
 import warnings
 

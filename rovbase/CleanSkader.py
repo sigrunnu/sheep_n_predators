@@ -1,19 +1,12 @@
 import pandas as pd
 import numpy as np
-"""
-from utils.Utm33ToLatLong import converter
-import sys
-sys.path.append('../')
-"""
+from Utm33ToLatLong import converter
 
 
 
-def cleanSkader(df):
+def format(df):
     # Join 'rase' and 'rase, annet'
     df.loc[df['Rase, annet'].notna(), 'Rase'] = df['Rase, annet']
-
-    # Convert to lat and long
-    # df1 = converter(df)
 
     # Drop columns not needed
     df1 = df.loc[:, ['RovbaseID', 'Funnetdato', 'Rase', 'Skadedato, fra', 'Skadedato, til',
@@ -23,12 +16,12 @@ def cleanSkader(df):
     df1['Funnetdato'] = pd.to_datetime(df1["Funnetdato"],  dayfirst=True)
     df1['Skadedato, fra'] = pd.to_datetime(df1['Skadedato, fra'],  dayfirst=True)
     df1['Skadedato, til'] = pd.to_datetime(df1['Skadedato, til'],  dayfirst=True)
+    
     df1 = translateToEnglish(df1)
     
     df2 = df1.sort_values(by=['date_from'])
-    df3 = remove_specific_skadearsak(df2)
 
-    return df3
+    return df2
 
 
 
@@ -57,6 +50,8 @@ def removeAttacks(df):
     
     return df
 
+
+
 def translateToEnglish(df):
     # Translate column names
     df.rename(columns={'Skadedato, til': 'date_to', 'Skadedato, fra': 'date_from', 'Skadeårsak': 'predator',
@@ -73,11 +68,12 @@ def translateToEnglish(df):
     return df2
 
 
-#df = pd.read_csv('data/rovbase/original/rovviltskader_meraker_2015-2021.csv')
-#df1 = claenSkader(df)
-#df1 = removeAttacks(df)
-#df1.to_csv('data/rovbase/rovviltskader.csv', index=False)
+def clean(df):
+    # Convert to lat and long
+    df1 = format(df)
+    df2 = converter(df1)
+    df3 = remove_specific_skadearsak(df2)
+    df4 = removeAttacks(df3)
+    
+    #df4.to_csv('data/rovbase/rovviltskader.csv', index=False)
 
-df = pd.read_csv('data/rovbase/original/rovviltskader_meraker_2015-2021.csv')
-df1 = translateToEnglish(df)
-df1.to_csv('data/rovbase/original/rovviltskader_meraker_2015-2021.csv', index=False)
