@@ -1,11 +1,10 @@
+import requests
 
 """
  Adds a latitude and longitude column to the existing dataset.
  
  Returns the new dataset.
-
 """
-import requests
 
 
 def converter(data):

@@ -8,6 +8,8 @@ def calculate_distance(lat1, long1, lat2, long2):
     t2 = (lat2, long2)
     return haversine(t1, t2, unit=Unit.METERS)
 
+
+
 # Add attack feature if attack is on same day as sheep and sheep is closer than 1500 meters
 def add_attack(sheep_data, attack_data, radius):
     for a in attack_data.index:
@@ -28,9 +30,6 @@ def add_attack(sheep_data, attack_data, radius):
             distance_to_attack = calculate_distance(sheep_lat, sheep_long, attack_lat, attack_long)
             if distance_to_attack <= radius: 
                 sheep_data.at[sheep, 'attack'] = 1
-                #sheep_data.at[sheep, 'attack_distance'] = round(distance_to_attack, 0)
-                #sheep_data.at[sheep, 'predator'] = attack_data.at[a, 'Skadearsak']
-                #sheep_data.at[sheep, 'attack_id'] = attack_data.at[a, 'RovbaseID']
     
     attack_count = sheep_data['attack'].value_counts()
     print('Radius: ', radius, 'meter \n', attack_count)
@@ -41,6 +40,8 @@ def add_attack(sheep_data, attack_data, radius):
     print('Prosent av hvor mye av dataen som er med i ett attack: ', perc, '%')
 
     return sheep_data
+
+
 
 """
 attack_data = pd.read_csv('data/rovbase/rovviltskader.csv')
@@ -58,9 +59,6 @@ for file in files:
 
     sheep_data1 = sheep_data.drop(columns=['attack'])
     sheep_data1['attack'] = 0
-    #sheep_data['attack_distance'] = 0.0
-    #sheep_data['predator'] = None
-    #sheep_data['attack_id'] = None
 
     print('For datasett: ', file)
     
