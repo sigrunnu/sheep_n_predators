@@ -11,7 +11,7 @@ The phases of the master thesis with their corresponding folders are listed belo
 Inlcudes the files in the folder `eda`.
 All the files contains code and visualisations used in the EDA of the sheep data and rovbase data.
 
-## Data preparation
+## Data Preparation
 
 The code used for data cleaning is included in the folder `cleaning` and `rovbase`. `cleaning` containes files related to the cleaning of sheep data, while `rovbase` contains the cleaning files for predator data.
 All code for feature engineering are located in the folder `features`.
